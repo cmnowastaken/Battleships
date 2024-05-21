@@ -12,10 +12,10 @@ public class PrintBoard {
 
         for (int i = 0; i < columns; i++) {
             System.out.print(i + " ");
-                for (int j = 0; j < rows; j++) {
-                    System.out.print(" • ");
-                }
-                System.out.println();
+            for (int j = 0; j < rows; j++) {
+                System.out.print(" • ");
             }
+            System.out.println();
         }
     }
+}
