@@ -1,4 +1,3 @@
-import java.util.Scanner;
 
 public class PlaceShip {
     public static void main(String[] args) {
@@ -39,29 +38,12 @@ public class PlaceShip {
             }
             System.out.println();
         }
-
-        Scanner scanner = new Scanner(System.in);
-
-        while (shipsHit < 5) {
-            System.out.println("Choose a coordinate to shoot at (eg. B7)");
-            String coordinate = scanner.nextLine();
-            coordinateY = coordinate.charAt(0) - 'A';
-            coordinateX = coordinate.charAt(1) - '0' - 1;
-
-            if (shipBoard[coordinateY][coordinateX].equals("X")) {
-                board[coordinateY][coordinateX] = "X";
-                shipsHit++;
-                System.out.println("Hit!");
-            } else {
-                board[coordinateY][coordinateX] = "O";
-                System.out.println("Miss!");
-            }
-            ;
-        }
+    }
+}
 
 
 
-        /*
+/*
         Random rand = new Random();
         toggle = rand.nextInt(2);
 
@@ -70,6 +52,3 @@ public class PlaceShip {
 
         replaceableX = rand.nextInt(columns);
         */
-
-    }
-}
