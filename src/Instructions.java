@@ -1,5 +1,11 @@
+import java.util.Scanner;
+
 public class Instructions {
     public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+        int decision;
+
         String multiLineStr = """
                                    ___  ___ ______________   __________ _________  ____
                                   / _ )/ _ /_  __/_  __/ /  / __/ __/ // /  _/ _ \\/ __/
@@ -67,5 +73,19 @@ public class Instructions {
                                 4) No, I don't want to play anyway
                               """;
             System.out.println(multiLineStr);
+        decision = scanner.nextInt();
+
+        if (decision == 1) {
+            System.out.println('\u000c');
+        } else if (decision == 2) {
+            System.exit(0);
+        } else if (decision == 3) {
+            System.out.println('\u000c');
+            System.out.println(multiLineStr);
+        } else if (decision == 4) {
+            System.exit(0);
+        } else {
+            System.out.println("Invalid input, please enter an integer between 1 and 4.");
+        }
     }
 }
