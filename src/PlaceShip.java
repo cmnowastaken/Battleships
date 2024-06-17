@@ -1,4 +1,6 @@
+import java.util.Objects;
 import java.util.Random;
+import java.util.Scanner;
 
 public class PlaceShip {
     static void shipPlace(int shipSize, int columns, int rows, String shipLetter, String[][] shipBoard) {
@@ -8,33 +10,33 @@ public class PlaceShip {
         int replaceableX;
         int replaceableY;
         if (toggle == 0) {
-                replaceableX = rand.nextInt(rows);
-                replaceableY = rand.nextInt((columns - (shipSize + 1)) + 1);
-                for (int i = 0; i < shipSize; i++) {
-                    if (!shipBoard[replaceableX][replaceableY + i + 1].equals("•")) {
-                        shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
-                        return;
-                    }
-                }
-                for (int i = 0; i < shipSize; i++) {
-                    replaceableY++;
-                    shipBoard[replaceableX][replaceableY] = shipLetter;
-                }
-            } else {
-                replaceableX = rand.nextInt((rows - (shipSize + 1)) + 1);
-                replaceableY = rand.nextInt(columns);
-                for (int i = 0; i < shipSize; i++) {
-                    if (!shipBoard[replaceableX + i + 1][replaceableY].equals("•")) {
-                        shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
-                        return;
-                    }
-                }
-                for (int i = 0; i < shipSize; i++) {
-                    replaceableX++;
-                    shipBoard[replaceableX][replaceableY] = shipLetter;
+            replaceableX = rand.nextInt(rows);
+            replaceableY = rand.nextInt((columns - (shipSize + 1)) + 1);
+            for (int i = 0; i < shipSize; i++) {
+                if (!shipBoard[replaceableX][replaceableY + i + 1].equals("•")) {
+                    shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
+                    return;
                 }
             }
+            for (int i = 0; i < shipSize; i++) {
+                replaceableY++;
+                shipBoard[replaceableX][replaceableY] = shipLetter;
+            }
+        } else {
+            replaceableX = rand.nextInt((rows - (shipSize + 1)) + 1);
+            replaceableY = rand.nextInt(columns);
+            for (int i = 0; i < shipSize; i++) {
+                if (!shipBoard[replaceableX + i + 1][replaceableY].equals("•")) {
+                    shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
+                    return;
+                }
+            }
+            for (int i = 0; i < shipSize; i++) {
+                replaceableX++;
+                shipBoard[replaceableX][replaceableY] = shipLetter;
+            }
         }
+    }
 
     public static void main(String[] args) {
         int columns = 10;
