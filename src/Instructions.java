@@ -81,7 +81,6 @@ public class Instructions {
             System.exit(0);
         } else if (decision == 3) {
             System.out.println('\u000c');
-            System.out.println(multiLineStr);
         } else if (decision == 4) {
             System.exit(0);
         } else {

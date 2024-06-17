@@ -1,59 +1,46 @@
 import java.util.Random;
 
 public class PlaceShip {
-    static void shipPlace(int replaceableX, int replaceableY, int shipSize, int toggle, int columns, int rows, String shipLetter, String[][] shipBoard) {
+    static void shipPlace(int shipSize, int columns, int rows, String shipLetter, String[][] shipBoard) {
         Random rand = new Random();
-        toggle = rand.nextInt(2);
-        boolean occupied = false;
+        int toggle = rand.nextInt(2);
 
-        for (int i = 0; i < shipSize; i++) {
-            for (int j = 0; j < rows; j++) {
-                if (shipBoard[i][j].equals("A")
-                        || shipBoard[i][j].equals("B")
-                        || shipBoard[i][j].equals("C")
-                        || shipBoard[i][j].equals("D")
-                        || shipBoard[i][j].equals("E")) {
-                    occupied = true;
-                }
-            }
-        }
-        if (!occupied) {
-            if (toggle == 0) {
+        int replaceableX;
+        int replaceableY;
+        if (toggle == 0) {
                 replaceableX = rand.nextInt(rows);
                 replaceableY = rand.nextInt((columns - (shipSize + 1)) + 1);
+                for (int i = 0; i < shipSize; i++) {
+                    if (!shipBoard[replaceableX][replaceableY + i + 1].equals("•")) {
+                        shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
+                        return;
+                    }
+                }
                 for (int i = 0; i < shipSize; i++) {
                     replaceableY++;
                     shipBoard[replaceableX][replaceableY] = shipLetter;
                 }
-            } else if (toggle == 1) {
+            } else {
                 replaceableX = rand.nextInt((rows - (shipSize + 1)) + 1);
                 replaceableY = rand.nextInt(columns);
+                for (int i = 0; i < shipSize; i++) {
+                    if (!shipBoard[replaceableX + i + 1][replaceableY].equals("•")) {
+                        shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
+                        return;
+                    }
+                }
                 for (int i = 0; i < shipSize; i++) {
                     replaceableX++;
                     shipBoard[replaceableX][replaceableY] = shipLetter;
                 }
             }
         }
-    }
+
     public static void main(String[] args) {
         int columns = 10;
         int rows = 10;
-        int replaceableX = 0;
-        int replaceableY = 0;
-        int toggle = 0;
-        int shipsHit = 0;
 
-
-        String[][] board = new String[columns][rows];
         String[][] shipBoard = new String[columns][rows];
-
-
-
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
-                board[i][j] = "•";
-            }
-        }
 
         for (int i = 0; i < columns; i++) {
             for (int j = 0; j < rows; j++) {
@@ -61,13 +48,13 @@ public class PlaceShip {
             }
         }
 
-        shipPlace(replaceableX, replaceableY, 5, toggle, columns, rows, "A", shipBoard);
-        shipPlace(replaceableX, replaceableY, 4, toggle, columns, rows, "B", shipBoard);
-        shipPlace(replaceableX, replaceableY, 3, toggle, columns, rows, "C", shipBoard);
-        shipPlace(replaceableX, replaceableY, 3, toggle, columns, rows, "D", shipBoard);
-        shipPlace(replaceableX, replaceableY, 2, toggle, columns, rows, "E", shipBoard);
+        shipPlace(5, columns, rows, "A", shipBoard);
+        shipPlace(4, columns, rows, "B", shipBoard);
+        shipPlace(3, columns, rows, "C", shipBoard);
+        shipPlace(3, columns, rows, "D", shipBoard);
+        shipPlace(2, columns, rows, "E", shipBoard);
 
-        for (int i = 0; i < columns; i++) {
+        for (int i = 0; i < columns; i++    ) {
             for (int j = 0; j < rows; j++) {
                 System.out.print(shipBoard[i][j] + "  ");
             }
