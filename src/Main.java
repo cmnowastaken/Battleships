@@ -15,7 +15,7 @@ public class Main {
                                 There will be 5 battleships set out on the board. Their shapes are as follows.
                               
                                 𝖷 𝖷 𝖷 𝖷 𝖷
-                                𝖷 𝖷 𝖷 𝖷
+                                𝖷 𝖷 𝖷 𝖷 
                                 𝖷 𝖷 𝖷
                                 𝖷 𝖷 𝖷
                                 𝖷 𝖷
@@ -74,20 +74,10 @@ public class Main {
         System.out.println(multiLineStr);
     }
 
-
-    static void printBoard(int rows, int columns, String[][] shipBoard, String[][] board) {
-
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
-                board[i][j] = "•";
-            }
-        }
-
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
-                shipBoard[i][j] = "•";
-            }
-        }
+    static void printBoard(int rows,
+                           int columns,
+                           String[][] shipBoard,
+                           String[][] board) {
 
         System.out.print(" ");
         for (int i = 1; i < columns; i++) {
@@ -99,155 +89,137 @@ public class Main {
         for (int i = 0; i < columns; i++) {
             System.out.print("ABCDEFGHIJ".charAt(i) + "  ");
             for (int j = 0; j < rows; j++) {
-                System.out.print(board[i][j] + "  ");
+                System.out.print(shipBoard[i][j] + "  ");
             }
             System.out.println();
         }
     }
 
-    static void PlayerControls(int shipsHit,
-                               int turns,
+    static int checkForSunk(int columns,
+                            int rows,
+                            int shipsSunk,
+                            boolean[] checkFor,
+                            String[][] shipBoard,
+                            String[][] board) {
+        String[] shipNames = {"Carrier (XXXXX)", "Tanker (XXXX)", "Frigate 1 (XXX)", "Frigate 2 (XXX)", "Patrol Boat (XX)"};
+        char[] shipLetters = {'A', 'B', 'C', 'D', 'E'};
+        int[] shipSizes = {5, 4, 3, 3, 2};
+
+        for (int k = 0; k < checkFor.length; k++) {
+            if (checkFor[k]) {
+                boolean sunk = true;
+                for (int i = 0; i < columns; i++) {
+                    for (int j = 0; j < rows; j++) {
+                        if (shipBoard[i][j].equals(String.valueOf(shipLetters[k])) && !Objects.equals(board[i][j], "X")) {
+                            sunk = false;
+                            break;
+                        }
+                    }
+                    if (!sunk) break;
+                }
+                if (sunk) {
+                    System.out.println(shipNames[k] + " Sunk!");
+                    checkFor[k] = false;
+                    shipsSunk++;
+                }
+            }
+        }
+        return shipsSunk;
+    }
+
+    static void playerControls(int[] shipsSunk,
+                               int[] turns,
                                String[][] shipBoard,
                                String[][] board,
                                int columns,
                                int rows,
-                               boolean checkForA,
-                               boolean checkForB) {
+                               boolean[] checkFor) {
         Scanner scanner = new Scanner(System.in);
 
-        while (shipsHit < 3) {
-            turns++;
+        while (shipsSunk[0] < 5) {
+            turns[0]++;
             System.out.println("Choose a coordinate to shoot at (eg. B7)");
-            String coordinate = scanner.nextLine();
+            String coordinate = scanner.nextLine().toUpperCase();
             int coordinateY = coordinate.charAt(0) - 'A';
-            int coordinateX = coordinate.charAt(1) - '0' - 1;
+            int coordinateX = Integer.parseInt(coordinate.substring(1)) - 1;
 
-            if (coordinate.length() != 2) {
+            if (coordinate.length() < 2 || coordinate.length() > 3 || coordinateY < 0 || coordinateY >= 10 || coordinateX < 0 || coordinateX >= 10) {
                 System.out.println("Invalid coordinate");
                 continue;
             }
 
-            if (shipBoard[coordinateY][coordinateX].equals("A")
-                    || shipBoard[coordinateY][coordinateX].equals("B")
-                    || shipBoard[coordinateY][coordinateX].equals("C")
-                    || shipBoard[coordinateY][coordinateX].equals("D")
-                    || shipBoard[coordinateY][coordinateX].equals("E")){
+            if (shipBoard[coordinateY][coordinateX].matches("[ABCDE]")) {
                 board[coordinateY][coordinateX] = "X";
                 shipBoard[coordinateY][coordinateX] = "L";
-                shipsHit++;
                 System.out.println("Hit!");
             } else if (board[coordinateY][coordinateX].equals("•")) {
                 board[coordinateY][coordinateX] = "O";
                 shipBoard[coordinateY][coordinateX] = "L";
                 System.out.println("Miss!");
             } else if (shipBoard[coordinateY][coordinateX].equals("L")) {
-                    System.out.println("Coordinate already attempted, please try another.");
-                    continue;
+                System.out.println("Coordinate already attempted, please try another.");
+                continue;
             } else {
                 System.out.println("Coordinate invalid, please enter a letter between A-J and a number between 1-10.");
                 continue;
             }
 
-            for (int i = 0; i < columns; i++) {
-                for (int j = 0; j < rows; j++) {
-                    System.out.print(board[i][j] + "  ");
-                }
-                System.out.println();
-            }
+            printBoard(rows, columns, board, shipBoard);
 
-            boolean aSunk = true;
-            if (checkForA) {
-                for (int i = 0; i < columns; i++) {
-                    for (int j = 0; j < rows; j++) {
-                        if (shipBoard[i][j].equals("A") && !Objects.equals(board[i][j], "X")) {
-                            aSunk = false;
-                            break;
-                        }
-                    }
-                }
-            }
+            shipsSunk[0] = checkForSunk(rows, columns, shipsSunk[0], checkFor, shipBoard, board);
 
-            if (aSunk && checkForA) {
-                System.out.println("Sunk!");
-                checkForA = false;
-            }
-
-            boolean bSunk = true;
-            if (checkForB) {
-                for (int i = 0; i < columns; i++) {
-                    for (int j = 0; j < rows; j++) {
-                        if (shipBoard[i][j].equals("B") && !Objects.equals(board[i][j], "X")) {
-                            bSunk = false;
-                            break;
-                        }
-                    }
-                }
-            }
-
-
-            if (bSunk && checkForB) {
-                System.out.println("Sunk!");
-                checkForB = false;
-            }
-
-            if (shipsHit == 3) {
-                System.out.println("Game over! You won in " + turns + " turns.");
+            if (shipsSunk[0] == 5) {
+                System.out.println("Game over! You won in " + turns[0] + " turns.");
                 System.exit(0);
             }
         }
     }
-        static void shipPlace(int shipSize,
-                              int columns,
-                              int rows,
-                              String shipLetter,
-                              String[][] shipBoard) {
-            Random rand = new Random();
-            int toggle = rand.nextInt(2);
 
-            int replaceableX;
-            int replaceableY;
-            if (toggle == 0) {
-                replaceableX = rand.nextInt(rows);
-                replaceableY = rand.nextInt((columns - (shipSize + 1)) + 1);
-                for (int i = 0; i < shipSize; i++) {
-                    if (!shipBoard[replaceableX][replaceableY + i + 1].equals("•")) {
-                        shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
-                        return;
-                    }
-                }
-                for (int i = 0; i < shipSize; i++) {
-                    replaceableY++;
-                    shipBoard[replaceableX][replaceableY] = shipLetter;
-                }
-            } else {
-                replaceableX = rand.nextInt((rows - (shipSize + 1)) + 1);
-                replaceableY = rand.nextInt(columns);
-                for (int i = 0; i < shipSize; i++) {
-                    if (!shipBoard[replaceableX + i + 1][replaceableY].equals("•")) {
-                        shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
-                        return;
-                    }
-                }
-                for (int i = 0; i < shipSize; i++) {
-                    replaceableX++;
-                    shipBoard[replaceableX][replaceableY] = shipLetter;
+    static void shipPlace(int shipSize,
+                          int columns,
+                          int rows,
+                          String shipLetter,
+                          String[][] shipBoard) {
+        Random rand = new Random();
+        int toggle = rand.nextInt(2);
+
+        int replaceableX;
+        int replaceableY;
+        if (toggle == 0) {
+            replaceableX = rand.nextInt(rows);
+            replaceableY = rand.nextInt(columns - shipSize + 1);
+            for (int i = 0; i < shipSize; i++) {
+                if (!shipBoard[replaceableX][replaceableY + i].equals("•")) {
+                    shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
+                    return;
                 }
             }
+            for (int i = 0; i < shipSize; i++) {
+                shipBoard[replaceableX][replaceableY + i] = shipLetter;
+            }
+        } else {
+            replaceableX = rand.nextInt(rows - shipSize + 1);
+            replaceableY = rand.nextInt(columns);
+            for (int i = 0; i < shipSize; i++) {
+                if (!shipBoard[replaceableX + i][replaceableY].equals("•")) {
+                    shipPlace(shipSize, columns, rows, shipLetter, shipBoard);
+                    return;
+                }
+            }
+            for (int i = 0; i < shipSize; i++) {
+                shipBoard[replaceableX + i][replaceableY] = shipLetter;
+            }
         }
+    }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         int columns = 10;
         int rows = 10;
-        int shipsHit = 0;
-        int coordinateY;
-        int coordinateX;
-        int turns = 0;
-        boolean aSunk;
-        boolean bSunk;
-        boolean checkForA = true;
-        boolean checkForB = true;
+        int[] turns = {0};
+        int[] shipsSunk = {0};
+        boolean[] checkFor = {true, true, true, true, true};
         int decision = 0;
 
         String[][] board = new String[columns][rows];
@@ -271,15 +243,28 @@ public class Main {
             }
         }
 
-        printBoard(columns, rows, shipBoard, board);
+        for (int i = 0; i < columns; i++) {
+            for (int j = 0; j < rows; j++) {
+                board[i][j] = "•";
+            }
+        }
+
+        for (int i = 0; i < columns; i++) {
+            for (int j = 0; j < rows; j++) {
+                shipBoard[i][j] = "•";
+            }
+        }
+
+        printBoard(rows, columns, shipBoard, board);
         shipPlace(5, columns, rows, "A", shipBoard);
         shipPlace(4, columns, rows, "B", shipBoard);
         shipPlace(3, columns, rows, "C", shipBoard);
         shipPlace(3, columns, rows, "D", shipBoard);
         shipPlace(2, columns, rows, "E", shipBoard);
 
-        while (shipsHit < 17) {
-            PlayerControls(shipsHit, turns, shipBoard, board, columns, rows, checkForA, checkForB);
+        while (shipsSunk[0] < 5) {
+            playerControls(shipsSunk, turns, shipBoard, board, columns, rows, checkFor);
         }
     }
 }
+
