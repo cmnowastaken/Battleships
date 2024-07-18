@@ -1,3 +1,9 @@
+/*
+Elliott Bell
+26/6/24
+Battleships
+CSC223
+*/
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Objects;
@@ -6,71 +12,74 @@ public class Main {
 
     static void Instructions() {
         String multiLineStr = """
-                                   ___  ___ ______________   __________ _________  ____
-                                  / _ )/ _ /_  __/_  __/ /  / __/ __/ // /  _/ _ \\/ __/
-                                 / _  / __ |/ /   / / / /__/ _/_\\ \\/ _  // // ___/\\ \\ \s
-                                /____/_/ |_/_/   /_/ /____/___/___/_//_/___/_/  /___/ \s
-                                                                      \s
-                                
-                                There will be 5 battleships set out on the board. Their shapes are as follows.
-                              
-                                𝖷 𝖷 𝖷 𝖷 𝖷
-                                𝖷 𝖷 𝖷 𝖷 
-                                𝖷 𝖷 𝖷
-                                𝖷 𝖷 𝖷
-                                𝖷 𝖷
-                              
-                                Your job is to destroy these ships.
-                                
-                                To fire a missile, simply declare where you would like to shoot.
-                                
-                                For example, if you were to type G2 and press enter, a missile would be fired as follows:
-                              
-                                   1  2  3  4  5  6  7  8  9  10
-                                A  •  •  •  •  •  •  •  •  •  •
-                                B  •  •  •  •  •  •  •  •  •  •
-                                C  •  •  •  •  •  •  •  •  •  •
-                                D  •  •  •  •  •  •  •  •  •  •
-                                E  •  •  •  •  •  •  •  •  •  •
-                                F  •  •  •  •  •  •  •  •  •  •
-                                G  •  0  •  •  •  •  •  •  •  •
-                                H  •  •  •  •  •  •  •  •  •  •
-                                I  •  •  •  •  •  •  •  •  •  •
-                                J  •  •  •  •  •  •  •  •  •  •
-                                
-                                If there were to be a ship there, the board would display as follows:
-                                
-                                   1  2  3  4  5  6  7  8  9  10
-                                A  •  •  •  •  •  •  •  •  •  •
-                                B  •  •  •  •  •  •  •  •  •  •
-                                C  •  •  •  •  •  •  •  •  •  •
-                                D  •  •  •  •  •  •  •  •  •  •
-                                E  •  •  •  •  •  •  •  •  •  •
-                                F  •  •  •  •  •  •  •  •  •  •
-                                G  •  𝖷  •  •  •  •  •  •  •  •
-                                H  •  •  •  •  •  •  •  •  •  •
-                                I  •  •  •  •  •  •  •  •  •  •
-                                J  •  •  •  •  •  •  •  •  •  •
-                                
-                                Please note that the ships can be placed vertically as well, for example:
-                                
-                                𝖷
-                                𝖷
-                                𝖷
-                                
-                                As opposed to:
-                                
-                                𝖷 𝖷 𝖷
-                                
-                                Ships will never be placed on top of each other, but they can be placed next to each other.
-                                
-                                Does that make sense?
-                                
-                                1) Yes, let's play!
-                                2) Yes, but that sounds boring and I don't want to play
-                                3) No, please explain again
-                                4) No, I don't want to play anyway
-                              """;
+                 ________  ___  ___  ___  ________        ________  ___  ________   ___  __    _______   ________  ________     \s
+                |\\   ____\\|\\  \\|\\  \\|\\  \\|\\   __  \\      |\\   ____\\|\\  \\|\\   ___  \\|\\  \\|\\  \\ |\\  ___ \\ |\\   __  \\|\\   ____\\    \s
+                \\ \\  \\___|\\ \\  \\\\\\  \\ \\  \\ \\  \\|\\  \\     \\ \\  \\___|\\ \\  \\ \\  \\\\ \\  \\ \\  \\/  /|\\ \\   __/|\\ \\  \\|\\  \\ \\  \\___|_   \s
+                 \\ \\_____  \\ \\   __  \\ \\  \\ \\   ____\\     \\ \\_____  \\ \\  \\ \\  \\\\ \\  \\ \\   ___  \\ \\  \\_|/_\\ \\   _  _\\ \\_____  \\  \s
+                  \\|____|\\  \\ \\  \\ \\  \\ \\  \\ \\  \\___|      \\|____|\\  \\ \\  \\ \\  \\\\ \\  \\ \\  \\\\ \\  \\ \\  \\_|\\ \\ \\  \\\\  \\\\|____|\\  \\ \s
+                    ____\\_\\  \\ \\__\\ \\__\\ \\__\\ \\__\\           ____\\_\\  \\ \\__\\ \\__\\\\ \\__\\ \\__\\\\ \\__\\ \\_______\\ \\__\\\\ _\\ ____\\_\\  \\\s
+                   |\\_________\\|__|\\|__|\\|__|\\|__|          |\\_________\\|__|\\|__| \\|__|\\|__| \\|__|\\|_______|\\|__|\\|__|\\_________\\
+                   \\|_________|                             \\|_________|                                             \\|_________|
+                   
+                There will be 5 battleships set out on the board. Their shapes are as follows.
+                 
+                𝖷 𝖷 𝖷 𝖷 𝖷
+                𝖷 𝖷 𝖷 𝖷
+                𝖷 𝖷 𝖷
+                𝖷 𝖷 𝖷
+                𝖷 𝖷
+                            
+                Your job is to destroy these ships.
+                            
+                To fire a missile, simply declare where you would like to shoot.
+                            
+                For example, if you were to type G2 and press enter, a missile would be fired as follows:
+                            
+                   1  2  3  4  5  6  7  8  9  10
+                A  •  •  •  •  •  •  •  •  •  •
+                B  •  •  •  •  •  •  •  •  •  •
+                C  •  •  •  •  •  •  •  •  •  •
+                D  •  •  •  •  •  •  •  •  •  •
+                E  •  •  •  •  •  •  •  •  •  •
+                F  •  •  •  •  •  •  •  •  •  •
+                G  •  0  •  •  •  •  •  •  •  •
+                H  •  •  •  •  •  •  •  •  •  •
+                I  •  •  •  •  •  •  •  •  •  •
+                J  •  •  •  •  •  •  •  •  •  •
+              
+                If there were to be a ship there, the board would display as follows:
+              
+                   1  2  3  4  5  6  7  8  9  10
+                A  •  •  •  •  •  •  •  •  •  •
+                B  •  •  •  •  •  •  •  •  •  •
+                C  •  •  •  •  •  •  •  •  •  •
+                D  •  •  •  •  •  •  •  •  •  •
+                E  •  •  •  •  •  •  •  •  •  •
+                F  •  •  •  •  •  •  •  •  •  •
+                G  •  𝖷  •  •  •  •  •  •  •  •
+                H  •  •  •  •  •  •  •  •  •  •
+                I  •  •  •  •  •  •  •  •  •  •
+                J  •  •  •  •  •  •  •  •  •  •
+              
+                Please note that the ships can be placed vertically as well, for example:
+              
+                𝖷
+                𝖷
+                𝖷
+              
+                As opposed to:
+              
+                𝖷 𝖷 𝖷
+              
+                Ships will never be placed on top of each other, but they can be placed next to each other.
+              
+                Does that make sense?
+              
+                1) Yes, let's play!
+                2) Yes, but that sounds boring and I don't want to play
+                3) No, please explain again
+                4) No, I don't want to play anyway
+                """;
         System.out.println(multiLineStr);
     }
 
@@ -140,10 +149,22 @@ public class Main {
             turns[0]++;
             System.out.println("Choose a coordinate to shoot at (eg. B7)");
             String coordinate = scanner.nextLine().toUpperCase();
-            int coordinateY = coordinate.charAt(0) - 'A';
-            int coordinateX = Integer.parseInt(coordinate.substring(1)) - 1;
 
-            if (coordinate.length() < 2 || coordinate.length() > 3 || coordinateY < 0 || coordinateY >= 10 || coordinateX < 0 || coordinateX >= 10) {
+            int coordinateY;
+            int coordinateX;
+
+            try {
+                if (coordinate.length() < 2 || coordinate.length() > 3) {
+                    throw new IllegalArgumentException("Invalid coordinate length");
+                }
+
+                coordinateY = coordinate.charAt(0) - 'A';
+                coordinateX = Integer.parseInt(coordinate.substring(1)) - 1;
+
+                if (coordinateY < 0 || coordinateY >= 10 || coordinateX < 0 || coordinateX >= 10) {
+                    throw new IllegalArgumentException("Coordinate out of bounds");
+                }
+            } catch (Exception e) {
                 System.out.println("Invalid coordinate");
                 continue;
             }
@@ -267,4 +288,3 @@ public class Main {
         }
     }
 }
-
