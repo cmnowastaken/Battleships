@@ -36,7 +36,7 @@ public class Main {
                 You will then select a coordinate. This will be either the uppermost (vertical) or left-most (horizontal) coordinate of the ship.
                 
                 For example, if I placed my Carrier (XXXXX) vertically on B4, it would be placed as follows:
-            
+                
                    1  2  3  4  5  6  7  8  9  10
                 A  •  •  •  •  •  •  •  •  •  •
                 B  •  •  •  X  •  •  •  •  •  •
@@ -116,17 +116,18 @@ public class Main {
                 Does that make sense?
                 
                 1) Yes, let's play!
-                2) Yes, but that sounds boring and I don't want to play
-                3) No, please explain again
-                4) No, I don't want to play anyway
+                2) No, please explain again
+                3) I don't want to play
                 """; // multi line string of instructions
         System.out.println(multiLineStr);
     }
 
-    static void printBoard(int rows,
-                           int columns,
-                           String[][] shipBoard,
-                           String[][] board) {
+    static void printBoard(
+            int rows,
+            int columns,
+            String[][] shipBoard,
+            String[][] board
+    ) {
 
         System.out.println(" "); // printing the board
         for (int j = 1; j < columns; j++) { // prints the numbers on the top of the board
@@ -140,129 +141,133 @@ public class Main {
             for (int l = 0; l < rows; l++) {
                 System.out.print(shipBoard[k][l] + "  ");
             }
-                System.out.println();
-            }
+            System.out.println();
+        }
     }
 
-        static void placeYourShips(String[][] playerBoard,
-                                   String[] shipNames,
-                                   String[][] playerBoardComputer,
-                                   int columns,
-                                   int rows) {
-            char[] maxVerticalCoordinate = {'F', 'G', 'G', 'H', 'I'};
-            int[] maxHorizontalCoordinate = {6, 7, 8, 8, 9};
-            int[] shipSize = {5, 4, 3, 3, 2};
-            char[] shipLetters = {'A', 'B', 'C', 'D', 'E'};
-            Scanner scanner = new Scanner(System.in);
+    static void placeYourShips(
+            String[][] playerBoard,
+            String[] shipNames,
+            String[][] playerBoardComputer,
+            int columns,
+            int rows
+    ) {
+        char[] maxVerticalCoordinate = {'F', 'G', 'G', 'H', 'I'};
+        int[] maxHorizontalCoordinate = {6, 7, 8, 8, 9};
+        int[] shipSize = {5, 4, 3, 3, 2};
+        char[] shipLetters = {'A', 'B', 'C', 'D', 'E'};
+        Scanner scanner = new Scanner(System.in);
 
-            for (int i = 0; i < shipNames.length; i++) { // run this for loop for all 5 ships
-                boolean validPlacement = false;
+        for (int i = 0; i < shipNames.length; i++) { // run this for loop for all 5 ships
+            boolean validPlacement = false;
 
-                while (!validPlacement) {
-                    System.out.println("Choose where to place your " + shipNames[i]);
-                    System.out.println("Should it be placed vertically (V) or horizontally (H)?");
-                    String toggle = scanner.nextLine().toUpperCase();
+            while (!validPlacement) {
+                System.out.println("Choose where to place your " + shipNames[i]);
+                System.out.println("Should it be placed vertically (V) or horizontally (H)?");
+                String toggle = scanner.nextLine().toUpperCase();
 
-                    if (!toggle.equals("V") && !toggle.equals("H")) {
-                        System.out.println("Invalid argument, try again");
-                        continue;
-                    }
-
-                    String verticalCoordinate;
-                    int horizontalCoordinate;
-                    int verticalCoordinateInteger;
-
-                    while (true) {
-                        char v = toggle.equals("V") ? maxVerticalCoordinate[i] : 'J'; // make a variable based on a ternary which either sets maxVerticalCoordinate to a value assigned in an array, or to J
-                        System.out.println("What should the vertical coordinate be? (A - " + v + ")");
-                        verticalCoordinate = scanner.nextLine().toUpperCase();
-
-                        if (verticalCoordinate.length() != 1 || verticalCoordinate.charAt(0) < 'A' || verticalCoordinate.charAt(0) > v) { // catch any invalid answers to the prompt
-                            System.out.println("Invalid vertical coordinate, try again");
-                            continue;
-                        }
-
-                        verticalCoordinateInteger = verticalCoordinate.charAt(0) - 'A'; // convert the vertical coordinate into an integer by subtracting the ascii value of "A"
-                        break;
-                    }
-
-                    while (true) { // does the same as the
-                        int v = (toggle.equals("V") ? 10 : maxHorizontalCoordinate[i]);
-                        System.out.println("What should the horizontal coordinate be? (1 - " + v + ")");
-                        if (scanner.hasNextInt()) {
-                            horizontalCoordinate = scanner.nextInt();
-                            scanner.nextLine(); // ensure that any inputs left by pressing enter are removed
-
-                            if (horizontalCoordinate < 1 || horizontalCoordinate > v) {
-                                System.out.println("Invalid horizontal coordinate, try again");
-                                continue;
-                            }
-                            horizontalCoordinate--; // convert to 0 index
-                            break;
-                        } else {
-                            System.out.println("Invalid coordinate, try again");
-                            scanner.next(); // get rid of the invalid input
-                        }
-                    }
-
-                    boolean invalidPlacement = false;
-
-                    if (toggle.equals("V")) { // if a ship does not fit, try again
-                        if (verticalCoordinateInteger + shipSize[i] > rows) {
-                            System.out.println("Ship does not fit in the vertical space, try again");
-                            continue;
-                        }
-
-                        for (int j = 0; j < shipSize[i]; j++) { // if a ship is already placed, break and try again
-                            if (!playerBoard[verticalCoordinateInteger + j][horizontalCoordinate].equals("•")) {
-                                invalidPlacement = true;
-                                break;
-                            }
-                        }
-                        if (!invalidPlacement) { // if the placement is valid, place the ship
-                            for (int j = 0; j < shipSize[i]; j++) {
-                                playerBoard[verticalCoordinateInteger + j][horizontalCoordinate] = "X";
-                                playerBoardComputer[verticalCoordinateInteger + j][horizontalCoordinate] = String.valueOf(shipLetters[i]);
-                            }
-                        }
-                    } else { // does the same, but for if the player wants the ship to be placed horizontally
-                        if (horizontalCoordinate + shipSize[i] > columns) {
-                            System.out.println("Ship does not fit in the horizontal space, try again");
-                            continue;
-                        }
-
-                        for (int j = 0; j < shipSize[i]; j++) {
-                            if (!playerBoard[verticalCoordinateInteger][horizontalCoordinate + j].equals("•")) {
-                                invalidPlacement = true;
-                                break;
-                            }
-                        }
-                        if (!invalidPlacement) {
-                            for (int j = 0; j < shipSize[i]; j++) {
-                                playerBoard[verticalCoordinateInteger][horizontalCoordinate + j] = "X";
-                                playerBoardComputer[verticalCoordinateInteger][horizontalCoordinate + j] = String.valueOf(shipLetters[i]);
-                            }
-                        }
-                    }
-
-                    if (invalidPlacement) {
-                        System.out.println("Invalid coordinate, try again");
-                        continue;
-                    }
-
-                    validPlacement = true;
-                    System.out.println("Placing " + shipNames[i] + " at (" + verticalCoordinate + (horizontalCoordinate + 1) + ")");
-                    printBoard(rows, columns, playerBoard, new String[0][]); // using the existing printBoard method instead of making another
+                if (!toggle.equals("V") && !toggle.equals("H")) {
+                    System.out.println("Invalid argument, try again");
+                    continue;
                 }
+
+                String verticalCoordinate;
+                int horizontalCoordinate;
+                int verticalCoordinateInteger;
+
+                while (true) {
+                    char v = toggle.equals("V") ? maxVerticalCoordinate[i] : 'J'; // make a variable based on a ternary which either sets maxVerticalCoordinate to a value assigned in an array, or to J
+                    System.out.println("What should the vertical coordinate be? (A - " + v + ")");
+                    verticalCoordinate = scanner.nextLine().toUpperCase();
+
+                    if (verticalCoordinate.length() != 1 || verticalCoordinate.charAt(0) < 'A' || verticalCoordinate.charAt(0) > v) { // catch any invalid answers to the prompt
+                        System.out.println("Invalid vertical coordinate, try again");
+                        continue;
+                    }
+
+                    verticalCoordinateInteger = verticalCoordinate.charAt(0) - 'A'; // convert the vertical coordinate into an integer by subtracting the ascii value of "A"
+                    break;
+                }
+
+                while (true) { // does the same as the
+                    int v = (toggle.equals("V") ? 10 : maxHorizontalCoordinate[i]);
+                    System.out.println("What should the horizontal coordinate be? (1 - " + v + ")");
+                    if (scanner.hasNextInt()) {
+                        horizontalCoordinate = scanner.nextInt();
+                        scanner.nextLine(); // ensure that any inputs left by pressing enter are removed
+
+                        if (horizontalCoordinate < 1 || horizontalCoordinate > v) {
+                            System.out.println("Invalid horizontal coordinate, try again");
+                            continue;
+                        }
+                        horizontalCoordinate--; // convert to 0 index
+                        break;
+                    } else {
+                        System.out.println("Invalid coordinate, try again");
+                        scanner.next(); // get rid of the invalid input
+                    }
+                }
+
+                boolean invalidPlacement = false;
+
+                if (toggle.equals("V")) { // if a ship does not fit, try again
+                    if (verticalCoordinateInteger + shipSize[i] > rows) {
+                        System.out.println("Ship does not fit in the vertical space, try again");
+                        continue;
+                    }
+
+                    for (int j = 0; j < shipSize[i]; j++) { // if a ship is already placed, break and try again
+                        if (!playerBoard[verticalCoordinateInteger + j][horizontalCoordinate].equals("•")) {
+                            invalidPlacement = true;
+                            break;
+                        }
+                    }
+                    if (!invalidPlacement) { // if the placement is valid, place the ship
+                        for (int j = 0; j < shipSize[i]; j++) {
+                            playerBoard[verticalCoordinateInteger + j][horizontalCoordinate] = "X";
+                            playerBoardComputer[verticalCoordinateInteger + j][horizontalCoordinate] = String.valueOf(shipLetters[i]);
+                        }
+                    }
+                } else { // does the same, but for if the player wants the ship to be placed horizontally
+                    if (horizontalCoordinate + shipSize[i] > columns) {
+                        System.out.println("Ship does not fit in the horizontal space, try again");
+                        continue;
+                    }
+
+                    for (int j = 0; j < shipSize[i]; j++) {
+                        if (!playerBoard[verticalCoordinateInteger][horizontalCoordinate + j].equals("•")) {
+                            invalidPlacement = true;
+                            break;
+                        }
+                    }
+                    if (!invalidPlacement) {
+                        for (int j = 0; j < shipSize[i]; j++) {
+                            playerBoard[verticalCoordinateInteger][horizontalCoordinate + j] = "X";
+                            playerBoardComputer[verticalCoordinateInteger][horizontalCoordinate + j] = String.valueOf(shipLetters[i]);
+                        }
+                    }
+                }
+
+                if (invalidPlacement) {
+                    System.out.println("Invalid coordinate, try again");
+                    continue;
+                }
+
+                validPlacement = true;
+                System.out.println("Placing " + shipNames[i] + " at (" + verticalCoordinate + (horizontalCoordinate + 1) + ")");
+                printBoard(rows, columns, playerBoard, new String[0][]); // using the existing printBoard method instead of making another
             }
         }
+    }
 
-    static int checkForSunk(int columns,
-                            int rows,
-                            int shipsSunk,
-                            boolean[] checkFor,
-                            String[][] shipBoard,
-                            String[][] board) {
+    static int checkForSunk(
+            int columns,
+            int rows,
+            int shipsSunk,
+            boolean[] checkFor,
+            String[][] shipBoard,
+            String[][] board
+    ) {
         String[] shipNames = {"Carrier (XXXXX)", "Tanker (XXXX)", "Frigate 1 (XXX)", "Frigate 2 (XXX)", "Patrol Boat (XX)"};
         char[] shipLetters = {'A', 'B', 'C', 'D', 'E'};
 
@@ -276,7 +281,8 @@ public class Main {
                             break;
                         }
                     }
-                    if (!sunk) break; // if the statement is declared early, break before checking fully through both arrays for efficiency.
+                    if (!sunk)
+                        break; // if the statement is declared early, break before checking fully through both arrays for efficiency.
                 }
                 if (sunk) { // if the ship is sunk, reference the correct ship in the array and tell the player that the ship has been sunk.
                     System.out.println(shipNames[k] + " Sunk!");
@@ -288,17 +294,19 @@ public class Main {
         return shipsSunk; // update the shipsSunk array for the win condition.
     }
 
-    static void playerControls(int[] shipsSunk,
-                               int[] turns,
-                               int[] shipsSunkComputer,
-                               boolean[] checkForComputer,
-                               String[][] shipBoard,
-                               String[][] board,
-                               String[][] playerBoard,
-                               String[][] playerBoardComputer,
-                               int columns,
-                               int rows,
-                               boolean[] checkFor) {
+    static void playerControls(
+            int[] shipsSunk,
+            int[] turns,
+            int[] shipsSunkComputer,
+            boolean[] checkForComputer,
+            String[][] shipBoard,
+            String[][] board,
+            String[][] playerBoard,
+            String[][] playerBoardComputer,
+            int columns,
+            int rows,
+            boolean[] checkFor
+    ) {
         Scanner scanner = new Scanner(System.in);
 
         while (shipsSunk[0] < 5) {
@@ -351,6 +359,7 @@ public class Main {
                 System.out.println("Game over! Computer won in " + turns[0] + " turns.");
                 System.exit(0);
             } else { // if nobody has won, continue the game.
+                printBoard(rows, columns, board, shipBoard);
                 computerTurn(columns, rows, playerBoardComputer, playerBoard, shipsSunkComputer, checkForComputer);
                 System.out.println();
                 System.out.println("Your turn!");
@@ -364,12 +373,14 @@ public class Main {
         }
     }
 
-    static void computerTurn(int columns,
-                             int rows,
-                             String[][] playerBoardComputer,
-                             String[][] playerBoard,
-                             int[] shipsSunkComputer,
-                             boolean[] checkForComputer) {
+    static void computerTurn(
+            int columns,
+            int rows,
+            String[][] playerBoardComputer,
+            String[][] playerBoard,
+            int[] shipsSunkComputer,
+            boolean[] checkForComputer
+    ) {
         Random rand = new Random();
         int computerXCoordinate, computerYCoordinate;
         String hitOrMiss;
@@ -412,7 +423,7 @@ public class Main {
                 hitOrMiss = "missed.";
             }
 
-            System.out.println("Computer fired at (" + computerYCoordinateChar + (computerXCoordinate + 1) + "), and " + hitOrMiss); // print this regardless of whether or not a ship was hit
+            System.out.println("Computer fired at (" + computerYCoordinateChar + (computerXCoordinate + 1) + "), and " + hitOrMiss); // print this whether or not a ship was hit
             printBoard(rows, columns, playerBoard, new String[0][]);
             break;
         }
@@ -429,11 +440,13 @@ public class Main {
         };
     }
 
-    static void shipPlace(int shipSize,
-                          int columns,
-                          int rows,
-                          String shipLetter,
-                          String[][] shipBoard) {
+    static void shipPlace(
+            int shipSize,
+            int columns,
+            int rows,
+            String shipLetter,
+            String[][] shipBoard
+    ) {
         Random rand = new Random();
         int toggle = rand.nextInt(2);
 
@@ -477,7 +490,6 @@ public class Main {
         boolean[] checkFor = {true, true, true, true, true};
         boolean[] checkForComputer = {true, true, true, true, true};
         String[] shipNames = {"Carrier (XXXXX)", "Tanker (XXXX)", "Frigate 1 (XXX)", "Frigate 2 (XXX)", "Patrol Boat (XX)"};
-        int decision = 0;
 
         String[][] board = new String[columns][rows];
         String[][] shipBoard = new String[columns][rows];
@@ -485,52 +497,65 @@ public class Main {
         String[][] playerBoardComputer = new String[columns][rows];
         Instructions();
 
-        while (decision != 1) {
-            decision = scanner.nextInt(); // while the decision is not to continue to the game, keep trying for a new decision
-
-            if (decision == 1) {
-                System.out.println('\u000c'); // if the player wants to continue, clear screen
-            } else if (decision == 2) {
-                System.exit(0); // if the player wants to leave, quit game
-            } else if (decision == 3) {
-                System.out.println('\u000c'); // if the player wants to get instructions again, clear screen and give them again
-                Instructions();
-            } else if (decision == 4) {
-                System.exit(0); // if the player wants to leave, quit game
-            } else {
-                System.out.println("Invalid input, please enter an integer between 1 and 4.");
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.isEmpty()) {
+                System.out.println("Error, please enter a number between 1 and 3");
+                continue;
             }
-        }
 
-        for (int i = 0; i < 4; i++) { // initialise all the boards
-            for (int j = 0; j < columns; j++) {
-                for (int k = 0; k < rows; k++) {
-                    board[j][k] = "•";
-                    shipBoard[j][k] = "•";
-                    playerBoard[j][k] = "•";
-                    playerBoardComputer[j][k] = "•";
+            char decision = input.charAt(0);
+
+            try {
+                switch (decision) {
+                    case '1':
+                        break;
+                    case '2':
+                        Instructions();
+                        continue;
+                    case '3':
+                        System.exit(0);
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid input, enter a number between 1 and 3");
+                }
+            } catch (Exception e) {
+                System.out.println("Error, please enter a number between 1 and 3");
+                continue;
+            }
+
+            for (int i = 0; i < 4; i++) { // initialise all the boards
+                for (int j = 0; j < columns; j++) {
+                    for (int k = 0; k < rows; k++) {
+                        board[j][k] = "•";
+                        shipBoard[j][k] = "•";
+                        playerBoard[j][k] = "•";
+                        playerBoardComputer[j][k] = "•";
+                    }
                 }
             }
-        }
 
-        printBoard(rows, columns, shipBoard, board); // place all the ships.
-        placeYourShips(playerBoard, shipNames, playerBoardComputer, columns, rows);
-        String gameStartDialogue = """
-                
-                All ships have been placed.
-                
-                Your turn!
-                """;
-        System.out.println(gameStartDialogue);
-        printBoard(rows, columns, shipBoard, board); // place all the ships.
-        shipPlace(5, columns, rows, "A", shipBoard);
-        shipPlace(4, columns, rows, "B", shipBoard);
-        shipPlace(3, columns, rows, "C", shipBoard);
-        shipPlace(3, columns, rows, "D", shipBoard);
-        shipPlace(2, columns, rows, "E", shipBoard);
+            printBoard(rows, columns, shipBoard, board); // place all the ships.
+            placeYourShips(playerBoard, shipNames, playerBoardComputer, columns, rows);
+            String gameStartDialogue = """
+                    
+                    All ships have been placed.
+                    
+                    Your turn!
+                    """;
+            System.out.println(gameStartDialogue);
+            printBoard(rows, columns, shipBoard, board); // place all the ships.
+            shipPlace(5, columns, rows, "A", shipBoard);
+            shipPlace(4, columns, rows, "B", shipBoard);
+            shipPlace(3, columns, rows, "C", shipBoard);
+            shipPlace(3, columns, rows, "D", shipBoard);
+            shipPlace(2, columns, rows, "E", shipBoard);
 
-        while (shipsSunk[0] < 5 && shipsSunkComputer[0] < 5) { // keep playing the game until the win condition is met
-            playerControls(shipsSunk, turns, shipsSunkComputer, checkForComputer, shipBoard, board, playerBoard, playerBoardComputer, columns, rows, checkFor);
+            while (shipsSunk[0] < 5 && shipsSunkComputer[0] < 5) { // keep playing the game until the win condition is met
+                playerControls(shipsSunk, turns, shipsSunkComputer, checkForComputer, shipBoard, board, playerBoard, playerBoardComputer, columns, rows, checkFor);
+
+
+            }
         }
     }
 }
