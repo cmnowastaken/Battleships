@@ -1,6 +1,6 @@
 /*
 Elliott Bell
-21/7/24
+23/7/24
 Battleships
 CSC223
 */
@@ -20,23 +20,23 @@ public class Main {
                     ____\\_\\  \\ \\__\\ \\__\\ \\__\\ \\__\\           ____\\_\\  \\ \\__\\ \\__\\\\ \\__\\ \\__\\\\ \\__\\ \\_______\\ \\__\\\\ _\\ ____\\_\\  \\\s
                    |\\_________\\|__|\\|__|\\|__|\\|__|          |\\_________\\|__|\\|__| \\|__|\\|__| \\|__|\\|_______|\\|__|\\|__|\\_________\\
                    \\|_________|                             \\|_________|                                             \\|_________|
-                
+                                
                 There will be 5 ships set out on the board. Their shapes are as follows.
-                
+                                
                 𝖷 𝖷 𝖷 𝖷 𝖷
                 𝖷 𝖷 𝖷 𝖷
                 𝖷 𝖷 𝖷
                 𝖷 𝖷 𝖷
                 𝖷 𝖷
-                
+                                
                 Your job is to destroy these ships before the computer destroys yours.
-                
+                                
                 To place your ships, you will declare whether the ship should be placed vertically or horizontally.
-                
+                                
                 You will then select a coordinate. This will be either the uppermost (vertical) or left-most (horizontal) coordinate of the ship.
-                
+                                
                 For example, if I placed my Carrier (XXXXX) vertically on B4, it would be placed as follows:
-                
+                                
                    1  2  3  4  5  6  7  8  9  10
                 A  •  •  •  •  •  •  •  •  •  •
                 B  •  •  •  X  •  •  •  •  •  •
@@ -48,9 +48,9 @@ public class Main {
                 H  •  •  •  •  •  •  •  •  •  •
                 I  •  •  •  •  •  •  •  •  •  •
                 J  •  •  •  •  •  •  •  •  •  •
-                
+                                
                 If I placed it horizontally on B4, it would be placed like this:
-                
+                                
                    1  2  3  4  5  6  7  8  9  10
                 A  •  •  •  •  •  •  •  •  •  •
                 B  •  •  •  X  X  X  X  X  •  •
@@ -62,19 +62,19 @@ public class Main {
                 H  •  •  •  •  •  •  •  •  •  •
                 I  •  •  •  •  •  •  •  •  •  •
                 J  •  •  •  •  •  •  •  •  •  •
-                
+                                
                 You cannot place your ships on top of each other.
-                
+                                
                 The prompt will tell you the valid coordinates for your ship to be placed.
-                
+                                
                 If you disobey these, you will start over.
-                
+                                
                 *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-                
+                                
                 To fire a missile, simply declare where you would like to shoot.
-                
+                                
                 For example, if you were to type G2 and press enter, a missile would be fired as follows:
-                
+                                
                    1  2  3  4  5  6  7  8  9  10
                 A  •  •  •  •  •  •  •  •  •  •
                 B  •  •  •  •  •  •  •  •  •  •
@@ -86,9 +86,9 @@ public class Main {
                 H  •  •  •  •  •  •  •  •  •  •
                 I  •  •  •  •  •  •  •  •  •  •
                 J  •  •  •  •  •  •  •  •  •  •
-                
+                                
                 If there were to be a ship there, the board would display as follows:
-                
+                                
                    1  2  3  4  5  6  7  8  9  10
                 A  •  •  •  •  •  •  •  •  •  •
                 B  •  •  •  •  •  •  •  •  •  •
@@ -100,21 +100,21 @@ public class Main {
                 H  •  •  •  •  •  •  •  •  •  •
                 I  •  •  •  •  •  •  •  •  •  •
                 J  •  •  •  •  •  •  •  •  •  •
-                
+                                
                 Please note that the ships can be placed vertically as well, for example:
-                
+                                
                 𝖷
                 𝖷
                 𝖷
-                
+                                
                 As opposed to:
-                
+                                
                 𝖷 𝖷 𝖷
-                
+                                
                 Ships will never be placed on top of each other, but they can be placed next to each other.
-                
+                                
                 Does that make sense?
-                
+                                
                 1) Yes, let's play!
                 2) No, please explain again
                 3) I don't want to play
@@ -268,7 +268,6 @@ public class Main {
             String[][] shipBoard,
             String[][] board
     ) {
-        String[] shipNames = {"Carrier (XXXXX)", "Tanker (XXXX)", "Frigate 1 (XXX)", "Frigate 2 (XXX)", "Patrol Boat (XX)"};
         char[] shipLetters = {'A', 'B', 'C', 'D', 'E'};
 
         for (int k = 0; k < checkFor.length; k++) { // check through every element in the array checkFor to see if any are true
@@ -276,7 +275,7 @@ public class Main {
                 boolean sunk = true;
                 for (int i = 0; i < columns; i++) {
                     for (int j = 0; j < rows; j++) {
-                        if (shipBoard[i][j].equals(String.valueOf(shipLetters[k])) && !Objects.equals(board[i][j], "X")) { // if the shipBoard still has a character equal to the value in the place in the shipLetters array that has been declared previously as (k), and the player board does not have an 'X' in that space, do not go further through the statement.
+                        if (shipBoard[i][j].equals(String.valueOf(shipLetters[k]))) { // if the shipBoard still has a character equal to the value in the place in the shipLetters array that has been declared previously as (k), and the player board does not have an 'X' in that space, do not go further through the statement.
                             sunk = false;
                             break;
                         }
@@ -285,7 +284,6 @@ public class Main {
                         break; // if the statement is declared early, break before checking fully through both arrays for efficiency.
                 }
                 if (sunk) { // if the ship is sunk, reference the correct ship in the array and tell the player that the ship has been sunk.
-                    System.out.println(shipNames[k] + " Sunk!");
                     checkFor[k] = false;
                     shipsSunk++;
                 }
@@ -336,7 +334,14 @@ public class Main {
             if (shipBoard[coordinateY][coordinateX].matches("[ABCDE]")) { // if the coordinate the player declared had a ship on it
                 board[coordinateY][coordinateX] = "X"; // make the coordinate equal to X on the player's board so the player can see the hit on their board.
                 shipBoard[coordinateY][coordinateX] = "L"; // make the coordinate on the ship board equal to 'L', so that the computer knows that the square has been fired at.
-                System.out.println("Hit!");
+                if (checkForSunk(rows, columns, shipsSunkComputer[0], checkForComputer, playerBoardComputer, playerBoard) > shipsSunkComputer[0]) {// if the ship has been sunk, say so
+                    char shipType = shipBoard[coordinateY][coordinateX].charAt(0);
+                    getShipName(shipType);
+                    System.out.println(shipType + "hit!");
+                    shipsSunk[0]++; // get the value of shipsSunk from the checkForShips method
+                } else {
+                    System.out.println("Hit!");
+                }
             } else if (board[coordinateY][coordinateX].equals("•")) { // if the coordinate fired at did not have a ship on it
                 board[coordinateY][coordinateX] = "O"; // show the player that the square did not have a ship on it by assigning a 0
                 shipBoard[coordinateY][coordinateX] = "L"; // show the computer that the square has been fired by making the shipBoard square equal to L
@@ -349,10 +354,10 @@ public class Main {
                 continue;
             }
 
-            shipsSunk[0] = checkForSunk(rows, columns, shipsSunk[0], checkFor, shipBoard, board); // get the value of shipsSunk from the checkForShips method
-            turns[0]++;
+                turns[0]++;
 
             if (shipsSunk[0] == 5) { // use this value to see if the player has won the game.
+                turns[0]--; // the way the turns have to update is flawed, so 1 turn must be subtracted in order to be accurate
                 System.out.println("Game over! You won in " + turns[0] + " turns.");
                 System.exit(0);
             } else if (shipsSunkComputer[0] == 5) { // see if the computer has won the game.
@@ -411,7 +416,7 @@ public class Main {
                 playerBoard[computerYCoordinate][computerXCoordinate] = "◼";
                 shipsSunkComputer[0] = checkForSunk(columns, rows, shipsSunkComputer[0], checkForComputer, playerBoardComputer, playerBoard);
                 hitOrMiss = "hit your " + getShipName(shipType); // customise the message to the type of ship that has been hit
-                if (checkForSunk(rows, columns, shipsSunkComputer[0], checkForComputer, playerBoardComputer, playerBoard) > shipsSunkComputer[0]) {
+                if (checkForSunk(rows, columns, shipsSunkComputer[0], checkForComputer, playerBoardComputer, playerBoard) < shipsSunkComputer[0]) {
                     hitOrMiss += " and sunk it!"; // if the ship has been sunk, say so
                     shipsSunkComputer[0]++;
                 } else {
@@ -423,7 +428,7 @@ public class Main {
                 hitOrMiss = "missed.";
             }
 
-            System.out.println("Computer fired at (" + computerYCoordinateChar + (computerXCoordinate + 1) + "), and " + hitOrMiss); // print this whether or not a ship was hit
+            System.out.println("Computer fired at (" + computerYCoordinateChar + (computerXCoordinate + 1) + "), and " + hitOrMiss); // print this regardless of whether a ship was hit
             printBoard(rows, columns, playerBoard, new String[0][]);
             break;
         }
@@ -500,6 +505,15 @@ public class Main {
         while (true) {
             String input = scanner.nextLine();
             if (input.isEmpty()) {
+                System.out.println("Error, please enter a number between 1 and 3");
+                continue;
+            }
+
+            try {
+                if (input.length() != 1) {
+                    throw new IllegalArgumentException("Invalid input, enter a number between 1 and 3");
+                }
+            } catch (Exception e) {
                 System.out.println("Error, please enter a number between 1 and 3");
                 continue;
             }
